@@ -9,7 +9,7 @@ public class GameConstants
     public static final float mouseSensitivityY = 0.001f;
     public static final float playerSpeed = 25;
     public static final float playerSpeedCrouching = 5;
-    public static final float fov = MathUtils.PI / 3;
+    public static final float fov = 60 * MathUtils.degreesToRadians;
     public static final int numRays = 512;
     public static final float rayLength = Gdx.graphics.getWidth() * 4;
     public static final float scale = (float) Gdx.graphics.getWidth() / numRays;
