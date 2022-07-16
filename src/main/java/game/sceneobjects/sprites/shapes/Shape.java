@@ -1,19 +1,15 @@
 package game.sceneobjects.sprites.shapes;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import game.GameConstants;
 import game.sceneobjects.Player;
 import game.sceneobjects.rays.Ray;
 
 import java.awt.geom.Line2D;
-import java.util.ArrayList;
 
 public abstract class Shape
 {
@@ -21,6 +17,8 @@ public abstract class Shape
     protected Texture texture;
     protected Vector2 velocity;
     protected float height;
+    protected boolean doDrawTop = true;
+    protected boolean doDrawBottom = true;
 
     public Shape(float height, Color color)
     {
@@ -29,16 +27,11 @@ public abstract class Shape
         velocity = new Vector2(0, 0);
     }
 
-    public Shape(float height, String path)
+    public Shape(float height, Texture texture)
     {
         this.height = height;
+        this.texture = texture;
         velocity = new Vector2(0, 0);
-        Pixmap pixmap1 = new Pixmap(Gdx.files.local(path));
-        Pixmap pixmap2 = new Pixmap((int) GameConstants.textureWidth, (int) GameConstants.textureWidth, pixmap1.getFormat());
-        pixmap2.drawPixmap(pixmap1, 0, 0, pixmap1.getWidth(), pixmap1.getHeight(), 0, 0, pixmap2.getWidth(), pixmap2.getHeight());
-        this.texture = new Texture(flipPixmap(pixmap2));
-        pixmap1.dispose();
-        pixmap2.dispose();
     }
 
     public float getHeight()
@@ -79,6 +72,26 @@ public abstract class Shape
     public void setVelocity(Vector2 velocity)
     {
         this.velocity = velocity;
+    }
+
+    public boolean isDoDrawTop()
+    {
+        return doDrawTop;
+    }
+
+    public void setDoDrawTop(boolean doDrawTop)
+    {
+        this.doDrawTop = doDrawTop;
+    }
+
+    public boolean isDoDrawBottom()
+    {
+        return doDrawBottom;
+    }
+
+    public void setDoDrawBottom(boolean doDrawBottom)
+    {
+        this.doDrawBottom = doDrawBottom;
     }
 
     public abstract Vector2 getCenter();

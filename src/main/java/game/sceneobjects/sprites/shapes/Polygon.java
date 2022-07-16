@@ -18,17 +18,20 @@ import java.util.Arrays;
 public class Polygon extends Shape
 {
     private float[] vertices;
+    private float y;
 
-    public Polygon(float[] vertices, float height, Color color)
+    public Polygon(float[] vertices, float height, float y, Color color)
     {
         super(height, color);
         this.vertices = vertices;
+        this.y = y;
     }
 
-    public Polygon(float[] vertices, float height, String path)
+    public Polygon(float[] vertices, float height, float y, Texture texture)
     {
-        super(height, path);
+        super(height, texture);
         this.vertices = vertices;
+        this.y = y;
     }
 
     public float[] getVertices()
@@ -39,6 +42,16 @@ public class Polygon extends Shape
     public void setVertices(float[] vertices)
     {
         this.vertices = vertices;
+    }
+
+    public float getY()
+    {
+        return y;
+    }
+
+    public void setY(float y)
+    {
+        this.y = y;
     }
 
     public Vector2 getCenter()
@@ -78,9 +91,6 @@ public class Polygon extends Shape
                 distances.add(Vector2.dst(player.getPosition().x, player.getPosition().y, intersection.x, intersection.y));
             }
         }
-        //int index = distances.isEmpty() ? -1 : distances.indexOf(Collections.min(distances));
-        //return index != -1 ? intersections.get(index) : new Vector2();
-        //return new Vector2[] {};
 
         if(distances.size() > 1)
         {
@@ -90,8 +100,14 @@ public class Polygon extends Shape
             Vector2 i1 = intersections.get(distances.indexOf(dist1));
             Vector2 i2 = intersections.get(distances.indexOf(dist2));
 
-            if(dist1 < dist2) return new Vector2[] {i1, i2};
-            else return new Vector2[] {i2, i1};
+            if(dist1 < dist2)
+            {
+                return new Vector2[] {i1, i2};
+            }
+            else
+            {
+                return new Vector2[] {i2, i1};
+            }
         }
         else if(distances.size() == 1)
         {
@@ -126,7 +142,7 @@ public class Polygon extends Shape
         EarClippingTriangulator triangulator = new EarClippingTriangulator();
         ShortArray array = triangulator.computeTriangles(vertices);
 
-        for (int i = 0; i < array.size - 2; i += 3)
+        for (int i = 0; i < array.size - 1; i += 2)
         {
             float x1 = vertices[array.get(i) * 2];
             float y1 = vertices[(array.get(i) * 2) + 1];

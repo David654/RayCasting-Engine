@@ -106,12 +106,16 @@ public class Scene extends ScreenAdapter implements Runnable
                         "..RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR.."
                 }; 
         
-        obstacleHandler.addObject(new Wall(new Polygon(new float[] {700, 700, 900, 900, 800, 1200}, 0.3f, Color.SCARLET)));
-        obstacleHandler.addObject(new Wall(new Polygon(new float[] {200, 1000, 600, 1200, 400, 1500}, 1.2f, "src\\main\\resources\\img 4.jpg")));
-        obstacleHandler.addObject(new Wall(new Circle(new Vector2(100, 320), 64, 0.6f, new Color(0.85f, 0.97f, 0.65f, 1))));
-        obstacleHandler.addObject(new Wall(new Circle(new Vector2(100, 192), 64, 0.8f, "src\\main\\resources\\img 5.jpg")));
-        obstacleHandler.addObject(new Wall(new Circle(new Vector2(100, 64), 64, 0.4f, new Color(1, 0.76f, 0, 1))));
-        obstacleHandler.addObject(new Wall(new Rectangle(new Vector2(1000, 200), new Vector2(500, 1000), 2, "src\\main\\resources\\img 2.png")));
+        obstacleHandler.addObject(new Wall(new Polygon(new float[] {700, 700, 900, 900, 800, 1200}, 0.3f, 300, Color.SCARLET)));
+        //obstacleHandler.addObject(new Wall(new Polygon(new float[] {200, 1000, 600, 1200, 400, 1500}, 1, 0, new Texture("src\\main\\resources\\img 4.jpg"))));
+        obstacleHandler.addObject(new Wall(new Circle(new Vector3(100, 400, 500), 32, 0.6f, new Color(0.85f, 0.97f, 0.65f, 1))));
+        obstacleHandler.addObject(new Wall(new Circle(new Vector3(100, 192, 0), 64, 1, new Texture("src\\main\\resources\\img 5.jpg"))));
+        obstacleHandler.addObject(new Wall(new Circle(new Vector3(100, 64, 0), 48, 0.4f, new Color(1, 0.76f, 0, 1))));
+
+        Rectangle rectangle = new Rectangle(new Vector3(1000, 200, 0), new Vector2(500, 1000), 1, new Texture("src\\main\\resources\\img 6.png"));
+        rectangle.setDoDrawTop(false);
+        rectangle.setDoDrawBottom(false);
+        obstacleHandler.addObject(new Wall(rectangle));
 
         /*for(int i = 0; i < map.length; i++)
         {
@@ -229,7 +233,7 @@ public class Scene extends ScreenAdapter implements Runnable
         //obstacleHandler.renderObjects(shapeRenderer);
         //player.render(shapeRenderer);
         batch.setProjectionMatrix(camera.combined);
-        rayCaster.render(shapeRenderer, batch);
+        rayCaster.render(player, shapeRenderer, batch);
 
         hudBatch.begin();
         hud.render(hudBatch, font);

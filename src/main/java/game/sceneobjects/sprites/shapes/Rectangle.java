@@ -1,11 +1,11 @@
 package game.sceneobjects.sprites.shapes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import game.sceneobjects.Player;
 import game.sceneobjects.rays.Ray;
 
@@ -14,29 +14,29 @@ import java.util.ArrayList;
 
 public class Rectangle extends Shape
 {
-    private Vector2 position;
+    private Vector3 position;
     private Vector2 size;
 
-    public Rectangle(Vector2 position, Vector2 size, float height, Color color)
+    public Rectangle(Vector3 position, Vector2 size, float height, Color color)
     {
         super(height, color);
         this.position = position;
         this.size = size;
     }
 
-    public Rectangle(Vector2 position, Vector2 size, float height, String path)
+    public Rectangle(Vector3 position, Vector2 size, float height, Texture texture)
     {
-        super(height, path);
+        super(height, texture);
         this.position = position;
         this.size = size;
     }
 
-    public Vector2 getPosition()
+    public Vector3 getPosition()
     {
         return position;
     }
 
-    public void setPosition(Vector2 position)
+    public void setPosition(Vector3 position)
     {
         this.position = position;
     }
@@ -109,8 +109,6 @@ public class Rectangle extends Shape
             intersections.add(intersection);
             distances.add(Vector2.dst(player.getPosition().x, player.getPosition().y, intersection.x, intersection.y));
         }
-        //int index = distances.isEmpty() ? -1 : distances.indexOf(Collections.min(distances));
-        //return index != -1 ? intersections.get(index) : new Vector2();
 
         if(distances.size() > 1)
         {
@@ -141,7 +139,7 @@ public class Rectangle extends Shape
 
     public void update()
     {
-        position.add(velocity);
+        position.add(new Vector3(velocity, 0));
     }
 
     public void render(ShapeRenderer shapeRenderer)

@@ -9,9 +9,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import game.GameConstants;
+import game.sceneobjects.Player;
 import game.sceneobjects.rays.Ray;
 import game.sceneobjects.rays.RayHandler;
 import game.sceneobjects.sprites.obstacles.Obstacle;
+import game.sceneobjects.sprites.shapes.Circle;
+import game.sceneobjects.sprites.shapes.Polygon;
 import game.sceneobjects.sprites.shapes.Shape;
 import game.sceneobjects.sprites.shapes.Rectangle;
 
@@ -34,7 +37,7 @@ public class RayCaster
 
     }
 
-    public void render(ShapeRenderer shapeRenderer, SpriteBatch spriteBatch)
+    public void render(Player player, ShapeRenderer shapeRenderer, SpriteBatch spriteBatch)
     {
         // SKY
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -47,7 +50,7 @@ public class RayCaster
             float g = color.g / (1 + step * i * 0.001f);
             float b = color.b / (1 + step * i * 0.001f);
             shapeRenderer.setColor(new Color(r, g, b, 1));
-            shapeRenderer.rect(0, -Gdx.graphics.getHeight() / 2f + step * (rayHandler.getObjectsCount() - 1 - i) + ray.getVerticalShift() + ray.getPlayerHeight(), Gdx.graphics.getWidth(), step);
+            shapeRenderer.rect(0, -Gdx.graphics.getHeight() / 2f + step * (rayHandler.getObjectsCount() - 1 - i) + player.getVerticalShift() + player.getHeight(), Gdx.graphics.getWidth(), step);
         }
 
         // FLOOR
@@ -60,7 +63,7 @@ public class RayCaster
             float g = color.g / (1 + step * i * 0.001f);
             float b = color.b / (1 + step * i * 0.001f);
             shapeRenderer.setColor(new Color(r, g, b, 1));
-            shapeRenderer.rect(0, Gdx.graphics.getHeight() / 2f + step * (rayHandler.getObjectsCount() - 1 - i) + ray.getVerticalShift() + ray.getPlayerHeight(), Gdx.graphics.getWidth(), step);
+            shapeRenderer.rect(0, Gdx.graphics.getHeight() / 2f + step * (rayHandler.getObjectsCount() - 1 - i) + player.getVerticalShift() + player.getHeight(), Gdx.graphics.getWidth(), step);
         }
         shapeRenderer.end();
 
@@ -75,20 +78,26 @@ public class RayCaster
             {
                 for(int j = obstacles.size() - 1; j >= 0; j--)
                 {
+                    Shape shape = obstacles.get(j).getShape();
+
+                    float y = 0;
+                    if(shape instanceof Circle circle) y = circle.getPosition().z;
+                    if(shape instanceof Rectangle rectangle) y = rectangle.getPosition().z;
+                    if(shape instanceof Polygon polygon) y = polygon.getY();
+
                     float distance1 = ray.distanceTo(ray.getStart(), pointsOfIntersection.get(j));
                     distance1 *= MathUtils.cos(ray.getAngle());
                     distance1 = (float) Math.max(distance1, 0.00001);
                     float projectionHeight1 = Math.min(GameConstants.projCoefficient / distance1, Gdx.graphics.getHeight() * 5);
 
-                    Shape shape = obstacles.get(j).getShape();
-                    float y1 = Gdx.graphics.getHeight() / 2f - projectionHeight1 / 2 + projectionHeight1 * (1 - shape.getHeight()) + ray.getVerticalShift() + ray.getPlayerHeight();
+                    float y1 = Gdx.graphics.getHeight() / 2f - projectionHeight1 / 2 + projectionHeight1 * (1 - shape.getHeight()) + player.getVerticalShift() + player.getHeight() - y / distance1 * 1000f;
 
                     float distance2 = ray.distanceTo(ray.getStart(), otherPointsOfIntersection.get(j));
                     distance2 *= MathUtils.cos(ray.getAngle());
                     distance2 = (float) Math.max(distance2, 0.00001);
                     float projectionHeight2 = Math.min(GameConstants.projCoefficient / (distance2), Gdx.graphics.getHeight() * 5);
 
-                    float y2 = Gdx.graphics.getHeight() / 2f - projectionHeight2 / 2 + projectionHeight2 * (1 - shape.getHeight()) + ray.getVerticalShift() + ray.getPlayerHeight();
+                    float y2 = Gdx.graphics.getHeight() / 2f - projectionHeight2 / 2 + projectionHeight2 * (1 - shape.getHeight()) + player.getVerticalShift() + player.getHeight() - y / distance2 * 1000f;
 
                     Color spriteColor = shape.getColor();
                     Texture texture = shape.getTexture();
@@ -102,20 +111,35 @@ public class RayCaster
 
                         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                         shapeRenderer.setColor(new Color(r, g, b, 1));
-                        shapeRenderer.rect(i * GameConstants.scale, y2, GameConstants.scale, y1 - y2);
+                        if(shape.isDoDrawTop()) shapeRenderer.rect(i * GameConstants.scale, y2, GameConstants.scale, y1 - y2);
+                        if(shape.isDoDrawBottom()) shapeRenderer.rect(i * GameConstants.scale, y2 + projectionHeight2 * shape.getHeight(), GameConstants.scale, y1 - y2);
                         shapeRenderer.end();
                     }
                     else
                     {
-                        Vector2 diff = otherPointsOfIntersection.get(j).sub(shape.getCenter());
-                        float offset = diff.x < diff.y ? otherPointsOfIntersection.get(j).x : otherPointsOfIntersection.get(j).y;
-                        offset %= GameConstants.textureWidth;
-                        offset = Math.max(offset, 0);
+                        float offset = (otherPointsOfIntersection.get(j).x + otherPointsOfIntersection.get(j).y) / GameConstants.textureSize % 1;
+                        offset = MathUtils.floor(offset * texture.getWidth());
 
                         spriteBatch.begin();
-                        TextureRegion textureRegion = new TextureRegion(texture, (int) (offset * GameConstants.scale), 0, (int) GameConstants.scale, (int) GameConstants.textureWidth);
-                        spriteBatch.draw(textureRegion, i * GameConstants.scale, y2, GameConstants.scale, y1 - y2);
+                        TextureRegion textureRegion = new TextureRegion(texture, (int) (offset), 0, 1, texture.getHeight());
+                        textureRegion.flip(false, true);
+                        if(shape.isDoDrawTop()) spriteBatch.draw(textureRegion, i * GameConstants.scale, y2, GameConstants.scale, y1 - y2);
+                        if(shape.isDoDrawBottom()) spriteBatch.draw(textureRegion, i * GameConstants.scale, y2 + projectionHeight2 * shape.getHeight(), GameConstants.scale, y1 - y2);
                         spriteBatch.end();
+
+                        float a = 1 / (1 + distance2 * distance2 * 0.000001f);
+                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                        shapeRenderer.setColor(new Color(0, 0, 0, 1 - a));
+                        if(shape.isDoDrawTop())
+                        {
+                            //shapeRenderer.rect(i * GameConstants.scale, y2, GameConstants.scale, y1 - y2);
+                        }
+                        if(shape.isDoDrawBottom())
+                        {
+                            //shapeRenderer.rect(i * GameConstants.scale, y2 + projectionHeight2 * shape.getHeight(), GameConstants.scale, y1 - y2);
+                        }
+                        shapeRenderer.end();
+
                     }
 
                     // BODY
@@ -132,17 +156,20 @@ public class RayCaster
                     }
                     else
                     {
-                        Vector2 diff = pointsOfIntersection.get(j).sub(shape.getCenter());
-                        diff.x = Math.abs(diff.x);
-                        diff.y = Math.abs(diff.y);
-                        float offset = diff.x < diff.y ? pointsOfIntersection.get(j).x : pointsOfIntersection.get(j).y;
-                        offset %= 64;
-                        //offset = Math.max(offset, 0);
+                        float offset = (pointsOfIntersection.get(j).x + pointsOfIntersection.get(j).y) / GameConstants.textureSize % 1;
+                        offset = MathUtils.floor(offset * texture.getWidth());
 
                         spriteBatch.begin();
-                        TextureRegion textureRegion = new TextureRegion(texture, (int) (GameConstants.scale * offset), 0, (int) GameConstants.scale, (int) GameConstants.textureWidth);
-                        spriteBatch.draw(textureRegion, i * GameConstants.scale, y1, GameConstants.textureScale, projectionHeight1 * shape.getHeight());
+                        TextureRegion textureRegion = new TextureRegion(texture, (int) offset, 0, 1, texture.getHeight());
+                        textureRegion.flip(false, true);
+                        spriteBatch.draw(textureRegion, i * GameConstants.scale, y1, GameConstants.scale, projectionHeight1 * shape.getHeight());
                         spriteBatch.end();
+
+                        float a = 1 / (1 + distance1 * distance1 * 0.000001f);
+                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                        shapeRenderer.setColor(new Color(0, 0, 0, 1 - a));
+                        //shapeRenderer.rect(i * GameConstants.scale, y1, GameConstants.scale, projectionHeight1 * shape.getHeight());
+                        shapeRenderer.end();
                     }
                 }
             }

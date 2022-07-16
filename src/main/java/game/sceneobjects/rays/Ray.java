@@ -12,9 +12,6 @@ import game.sceneobjects.sprites.shapes.Shape;
 import game.sceneobjects.sprites.shapes.Circle;
 import game.sceneobjects.sprites.shapes.Polygon;
 import game.sceneobjects.sprites.shapes.Rectangle;;import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 public class Ray
 {
     private final Scene scene;
@@ -87,15 +84,6 @@ public class Ray
         return Vector2.dst(start.x, start.y, end.x, end.y);
     }
 
-    public float getVerticalShift()
-    {
-        return scene.player.getVerticalShift();
-    }
-
-    public float getPlayerHeight()
-    {
-        return scene.player.getHeight();
-    }
     public ArrayList<Vector2> getPointsOfIntersection()
     {
         return pointsOfIntersection;

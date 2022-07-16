@@ -1,37 +1,39 @@
 package game.sceneobjects.sprites.shapes;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import game.sceneobjects.Player;
 import game.sceneobjects.rays.Ray;
 
 public class Circle extends Shape
 {
-    private Vector2 position;
+    private Vector3 position;
     private float radius;
 
-    public Circle(Vector2 position, float radius, float height, Color color)
+    public Circle(Vector3 position, float radius, float height, Color color)
     {
         super(height, color);
         this.position = position;
         this.radius = radius;
     }
 
-    public Circle(Vector2 position, float radius, float height, String path)
+    public Circle(Vector3 position, float radius, float height, Texture texture)
     {
-        super(height, path);
+        super(height, texture);
         this.position = position;
         this.radius = radius;
     }
 
-    public Vector2 getPosition()
+    public Vector3 getPosition()
     {
         return position;
     }
 
-    public void setPosition(Vector2 position)
+    public void setPosition(Vector3 position)
     {
         this.position = position;
     }
@@ -81,8 +83,14 @@ public class Circle extends Shape
         float dist1 = Vector2.dst(x1, y1, player.getPosition().x, player.getPosition().y);
         float dist2 = Vector2.dst(x2, y2, player.getPosition().x, player.getPosition().y);
 
-        if(dist1 < dist2) return new Vector2[] {new Vector2(x1, y1), new Vector2(x2, y2)};
-        else return new Vector2[] {new Vector2(x2, y2), new Vector2(x1, y1)};
+        if(dist1 < dist2)
+        {
+            return new Vector2[]{new Vector2(x1, y1), new Vector2(x2, y2)};
+        }
+        else
+        {
+            return new Vector2[] {new Vector2(x2, y2), new Vector2(x1, y1)};
+        }
     }
 
     public boolean intersectsWithLine(Ray ray)
@@ -92,7 +100,7 @@ public class Circle extends Shape
 
     public void update()
     {
-        position.add(velocity);
+        position.add(new Vector3(velocity, 0));
     }
 
     public void render(ShapeRenderer shapeRenderer)
