@@ -1,4 +1,4 @@
-package game;
+package game.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
