@@ -1,9 +1,9 @@
-package game.sceneobjects.sprites.obstacles;
+package game.sceneobjects.handlers;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import game.sceneobjects.Handler;
+import game.sceneobjects.entities.obstacles.Obstacle;
 
-public class ObstacleHandler extends Handler<Obstacle>
+public class ObstacleHandler extends SceneObjectHandler<Obstacle>
 {
     public void updateObjects()
     {

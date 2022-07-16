@@ -1,24 +1,21 @@
 package game.sceneobjects.rays;
 
-public class RayThread extends Thread
-{
-    private final RayHandler rayHandler;
-    private final int start;
-    private final int end;
+import game.sceneobjects.handlers.RayHandler;
+import game.threads.SceneObjectThread;
 
+public class RayThread extends SceneObjectThread<Ray>
+{
     public RayThread(RayHandler rayHandler, int start, int end)
     {
-        this.rayHandler = rayHandler;
-        this.start = start;
-        this.end = end;
+        super(rayHandler, start, end);
     }
 
-    public void run()
+    protected void update()
     {
         for(int i = start; i < end; i++)
         {
-            Ray r = rayHandler.getObject(i);
-            r.update();
+            Ray ray = sceneObjectHandler.getObject(i);
+            ray.update();
         }
     }
 }

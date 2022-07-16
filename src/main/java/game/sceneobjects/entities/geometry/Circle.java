@@ -1,4 +1,4 @@
-package game.sceneobjects.sprites.shapes;
+package game.sceneobjects.entities.geometry;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;

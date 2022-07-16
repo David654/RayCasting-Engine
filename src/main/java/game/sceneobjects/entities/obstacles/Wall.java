@@ -1,6 +1,6 @@
-package game.sceneobjects.sprites.obstacles;
+package game.sceneobjects.entities.obstacles;
 
-import game.sceneobjects.sprites.shapes.Shape;
+import game.sceneobjects.entities.geometry.Shape;
 
 public class Wall extends Obstacle
 {

@@ -5,13 +5,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import game.main.Scene;
-import game.sceneobjects.sprites.obstacles.Mirror;
-import game.sceneobjects.sprites.obstacles.Obstacle;
-import game.sceneobjects.sprites.obstacles.Wall;
-import game.sceneobjects.sprites.shapes.Shape;
-import game.sceneobjects.sprites.shapes.Circle;
-import game.sceneobjects.sprites.shapes.Polygon;
-import game.sceneobjects.sprites.shapes.Rectangle;;import java.util.ArrayList;
+import game.sceneobjects.entities.obstacles.Obstacle;
+import game.sceneobjects.entities.obstacles.Wall;
+import game.sceneobjects.entities.geometry.Shape;
+import game.sceneobjects.entities.geometry.Circle;
+import game.sceneobjects.entities.geometry.Polygon;
+import game.sceneobjects.entities.geometry.Rectangle;;import java.util.ArrayList;
 public class Ray
 {
     private final Scene scene;

@@ -1,12 +1,12 @@
-package game.sceneobjects;
+package game.sceneobjects.handlers;
 
 import java.util.ArrayList;
 
-public abstract class Handler<T>
+public abstract class SceneObjectHandler<T>
 {
     public final ArrayList<T> objects;
 
-    public Handler()
+    public SceneObjectHandler()
     {
         objects = new ArrayList<>();
     }

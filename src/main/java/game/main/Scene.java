@@ -13,15 +13,17 @@ import com.badlogic.gdx.math.Vector3;
 import game.GameConstants;
 import game.hud.HUD;
 import game.input.InputHandler;
+import game.main.raycasting.Floor;
+import game.main.raycasting.RayCaster;
+import game.main.raycasting.Sky;
 import game.sceneobjects.Player;
 import game.sceneobjects.rays.Ray;
-import game.sceneobjects.rays.RayHandler;
-import game.sceneobjects.sprites.obstacles.Mirror;
-import game.sceneobjects.sprites.obstacles.ObstacleHandler;
-import game.sceneobjects.sprites.obstacles.Wall;
-import game.sceneobjects.sprites.shapes.Circle;
-import game.sceneobjects.sprites.shapes.Polygon;
-import game.sceneobjects.sprites.shapes.Rectangle;
+import game.sceneobjects.handlers.RayHandler;
+import game.sceneobjects.handlers.ObstacleHandler;
+import game.sceneobjects.entities.obstacles.Wall;
+import game.sceneobjects.entities.geometry.Circle;
+import game.sceneobjects.entities.geometry.Polygon;
+import game.sceneobjects.entities.geometry.Rectangle;
 import launcher.LaunchConstants;
 import org.lwjgl.opengl.GL20;
 
@@ -62,7 +64,7 @@ public class Scene extends ScreenAdapter implements Runnable
         rayHandler = new RayHandler();
         obstacleHandler = new ObstacleHandler();
         hud = new HUD(this);
-        rayCaster = new RayCaster(rayHandler);
+        rayCaster = new RayCaster(rayHandler, new Sky(new Color(0, 0.59f, 1, 1)), new Floor(Color.FOREST));
 
         initRays(GameConstants.fov, GameConstants.numRays, GameConstants.rayLength);
         initSprites();
@@ -84,29 +86,7 @@ public class Scene extends ScreenAdapter implements Runnable
 
     private void initSprites()
     {
-        String[] map = new String[]
-                {
-                        "..RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR..",
-                        ".P................................P.",
-                        "R..................................R",
-                        "R..................................R",
-                        "R.......SC.................SC......R",
-                        "R..................................R",
-                        "R..................................R",
-                        "R..................................R",
-                        "R.......S..................S.......R",
-                        "R.......C..........................R",
-                        "R..................................R",
-                        "R..........................C.......R",
-                        "R.......S.................CS.......R",
-                        "R..................................R",
-                        "R..................................R",
-                        "R..................................R",
-                        ".P.............CCC................P.",
-                        "..RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR.."
-                }; 
-        
-        obstacleHandler.addObject(new Wall(new Polygon(new float[] {700, 700, 900, 900, 800, 1200}, 0.3f, 300, Color.SCARLET)));
+        //obstacleHandler.addObject(new Wall(new Polygon(new float[] {700, 700, 900, 900, 800, 1200}, 0.3f, 300, Color.SCARLET)));
         //obstacleHandler.addObject(new Wall(new Polygon(new float[] {200, 1000, 600, 1200, 400, 1500}, 1, 0, new Texture("src\\main\\resources\\img 4.jpg"))));
         obstacleHandler.addObject(new Wall(new Circle(new Vector3(100, 400, 500), 32, 0.6f, new Color(0.85f, 0.97f, 0.65f, 1))));
         obstacleHandler.addObject(new Wall(new Circle(new Vector3(100, 192, 0), 64, 1, new Texture("src\\main\\resources\\img 5.jpg"))));
@@ -116,22 +96,6 @@ public class Scene extends ScreenAdapter implements Runnable
         rectangle.setDoDrawTop(false);
         rectangle.setDoDrawBottom(false);
         obstacleHandler.addObject(new Wall(rectangle));
-
-        /*for(int i = 0; i < map.length; i++)
-        {
-            for(int j = 0; j < map[i].length(); j++)
-            {
-                char ch = map[i].charAt(j);
-                switch(ch)
-                {
-                    case 'R' -> obstacleHandler.addObject(new Wall(new Rectangle(new Vector2(i * 100, j * 100), new Vector2(100, 100), 2, Color.GRAY)));
-                    case 'S' -> obstacleHandler.addObject(new Wall(new Rectangle(new Vector2(i * 100, j * 100), new Vector2(25, 25), 2, Color.GRAY)));
-                    case 'C' -> obstacleHandler.addObject(new Wall(new Circle(new Vector2(i * 100, j * 100), 25, 0.3f, Color.SCARLET)));
-                    case 'P' -> obstacleHandler.addObject(new Wall(new Polygon(new float[] {i * 100, j * 100, i * 100 - 200, j * 100, i * 100, j * 100 - 200}, 2, Color.SCARLET)));
-                    //case "P" -> obstacleHandler.addObject(new Wall(new Polygon(new float[] {700, 700, 900, 900, 800, 1200}, 0.3f, Color.SCARLET)));
-                }
-            }
-        }**/
 
         ProgramStateReporter.report(obstacleHandler.getObjectsCount() + " Sprites Loaded");
     }
@@ -205,7 +169,7 @@ public class Scene extends ScreenAdapter implements Runnable
         stop();
     }
 
-    public void render(float delta)
+    public synchronized void render(float delta)
     {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -229,10 +193,9 @@ public class Scene extends ScreenAdapter implements Runnable
 
         // game
         shapeRenderer.setProjectionMatrix(camera.combined);
-        rayHandler.updateObjects();
-        //obstacleHandler.renderObjects(shapeRenderer);
-        //player.render(shapeRenderer);
         batch.setProjectionMatrix(camera.combined);
+
+        rayHandler.updateObjects();
         rayCaster.render(player, shapeRenderer, batch);
 
         hudBatch.begin();

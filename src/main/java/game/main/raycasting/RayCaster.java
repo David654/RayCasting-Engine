@@ -1,4 +1,4 @@
-package game.main;
+package game.main.raycasting;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -11,25 +11,26 @@ import com.badlogic.gdx.math.Vector2;
 import game.GameConstants;
 import game.sceneobjects.Player;
 import game.sceneobjects.rays.Ray;
-import game.sceneobjects.rays.RayHandler;
-import game.sceneobjects.sprites.obstacles.Obstacle;
-import game.sceneobjects.sprites.shapes.Circle;
-import game.sceneobjects.sprites.shapes.Polygon;
-import game.sceneobjects.sprites.shapes.Shape;
-import game.sceneobjects.sprites.shapes.Rectangle;
+import game.sceneobjects.handlers.RayHandler;
+import game.sceneobjects.entities.obstacles.Obstacle;
+import game.sceneobjects.entities.geometry.Circle;
+import game.sceneobjects.entities.geometry.Polygon;
+import game.sceneobjects.entities.geometry.Shape;
+import game.sceneobjects.entities.geometry.Rectangle;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class RayCaster
 {
     private final RayHandler rayHandler;
-    private final HashMap<Shape, ArrayList<Rectangle>> sprites;
+    private final Sky sky;
+    private final Floor floor;
 
-    public RayCaster(RayHandler rayHandler)
+    public RayCaster(RayHandler rayHandler, Sky sky, Floor floor)
     {
         this.rayHandler = rayHandler;
-        sprites = new HashMap<>();
+        this.sky = sky;
+        this.floor = floor;
     }
 
     public void update()
@@ -39,32 +40,12 @@ public class RayCaster
 
     public void render(Player player, ShapeRenderer shapeRenderer, SpriteBatch spriteBatch)
     {
-        // SKY
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        for(int i = 0; i < rayHandler.getObjectsCount(); i++)
-        {
-            Ray ray = rayHandler.getObject(i);
-            float step = (float) Gdx.graphics.getHeight() / rayHandler.getObjectsCount();
-            Color color = new Color(0, 0.59f, 1, 1);
-            float r = color.r / (1 + step * i * 0.001f);
-            float g = color.g / (1 + step * i * 0.001f);
-            float b = color.b / (1 + step * i * 0.001f);
-            shapeRenderer.setColor(new Color(r, g, b, 1));
-            shapeRenderer.rect(0, -Gdx.graphics.getHeight() / 2f + step * (rayHandler.getObjectsCount() - 1 - i) + player.getVerticalShift() + player.getHeight(), Gdx.graphics.getWidth(), step);
-        }
+        // SKY
+        sky.rayCast(rayHandler, player, shapeRenderer);
 
         // FLOOR
-        for(int i = 0; i < rayHandler.getObjectsCount(); i++)
-        {
-            Ray ray = rayHandler.getObject(i);
-            float step = (float) Gdx.graphics.getHeight() * 1.2f / rayHandler.getObjectsCount();
-            Color color = Color.FOREST;
-            float r = color.r / (1 + step * i * 0.001f);
-            float g = color.g / (1 + step * i * 0.001f);
-            float b = color.b / (1 + step * i * 0.001f);
-            shapeRenderer.setColor(new Color(r, g, b, 1));
-            shapeRenderer.rect(0, Gdx.graphics.getHeight() / 2f + step * (rayHandler.getObjectsCount() - 1 - i) + player.getVerticalShift() + player.getHeight(), Gdx.graphics.getWidth(), step);
-        }
+        floor.rayCast(rayHandler, player, shapeRenderer);
         shapeRenderer.end();
 
         // OBSTACLES
@@ -74,7 +55,7 @@ public class RayCaster
             ArrayList<Vector2> pointsOfIntersection = ray.getPointsOfIntersection();
             ArrayList<Vector2> otherPointsOfIntersection = ray.getOtherPointsOfIntersection();
             ArrayList<Obstacle> obstacles = ray.getIntersectedObstacles();
-            if(!pointsOfIntersection.isEmpty() && pointsOfIntersection.get(0).x < GameConstants.rayLength)
+            if(!pointsOfIntersection.isEmpty() && pointsOfIntersection.get(0).x <= GameConstants.rayLength)
             {
                 for(int j = obstacles.size() - 1; j >= 0; j--)
                 {

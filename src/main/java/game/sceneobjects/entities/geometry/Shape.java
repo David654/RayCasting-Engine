@@ -1,8 +1,7 @@
-package game.sceneobjects.sprites.shapes;
+package game.sceneobjects.entities.geometry;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -99,22 +98,6 @@ public abstract class Shape
     public abstract Vector2 getNormal();
 
     public abstract String toString();
-
-    private Pixmap flipPixmap(Pixmap src)
-    {
-        final int width = src.getWidth();
-        final int height = src.getHeight();
-        Pixmap flipped = new Pixmap(width, height, src.getFormat());
-
-        for(int x = 0; x < width; x++)
-        {
-            for(int y = 0; y < height; y++)
-            {
-                flipped.drawPixel(x, y, src.getPixel(x, height - y - 1));
-            }
-        }
-        return flipped;
-    }
 
     public abstract Vector2[] getPointsOfIntersectionWithLine(Ray ray, Player player);
 

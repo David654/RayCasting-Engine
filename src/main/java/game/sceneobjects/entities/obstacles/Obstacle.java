@@ -1,7 +1,7 @@
-package game.sceneobjects.sprites.obstacles;
+package game.sceneobjects.entities.obstacles;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import game.sceneobjects.sprites.shapes.Shape;
+import game.sceneobjects.entities.geometry.Shape;
 
 public abstract class Obstacle
 {
