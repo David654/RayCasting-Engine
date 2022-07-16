@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import game.GameConstants;
+import game.main.GameConstants;
 import game.sceneobjects.entities.Player;
 import game.sceneobjects.rays.Ray;
 import game.sceneobjects.handlers.sceneobjects.RayHandler;

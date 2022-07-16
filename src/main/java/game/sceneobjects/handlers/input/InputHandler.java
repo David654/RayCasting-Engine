@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import game.GameConstants;
+import game.main.GameConstants;
 import game.main.Scene;
 
 public class InputHandler implements InputProcessor
