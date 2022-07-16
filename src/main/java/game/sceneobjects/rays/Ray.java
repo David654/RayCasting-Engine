@@ -10,7 +10,9 @@ import game.sceneobjects.entities.obstacles.Wall;
 import game.sceneobjects.entities.geometry.Shape;
 import game.sceneobjects.entities.geometry.Circle;
 import game.sceneobjects.entities.geometry.Polygon;
-import game.sceneobjects.entities.geometry.Rectangle;;import java.util.ArrayList;
+import game.sceneobjects.entities.geometry.Rectangle;
+import java.util.ArrayList;
+
 public class Ray
 {
     private final Scene scene;
