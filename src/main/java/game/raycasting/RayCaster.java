@@ -1,4 +1,4 @@
-package game.main.raycasting;
+package game.raycasting;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
