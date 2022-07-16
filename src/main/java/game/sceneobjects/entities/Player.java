@@ -1,4 +1,4 @@
-package game.sceneobjects;
+package game.sceneobjects.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

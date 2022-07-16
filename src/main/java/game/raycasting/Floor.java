@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import game.sceneobjects.Player;
+import game.sceneobjects.entities.Player;
 import game.sceneobjects.handlers.sceneobjects.RayHandler;
 
 public class Floor

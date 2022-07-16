@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import game.sceneobjects.Player;
+import game.sceneobjects.entities.Player;
 import game.sceneobjects.rays.Ray;
 
 import java.awt.geom.Line2D;

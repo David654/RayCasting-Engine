@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.GeometryUtils;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ShortArray;
-import game.sceneobjects.Player;
+import game.sceneobjects.entities.Player;
 import game.sceneobjects.rays.Ray;
 
 import java.awt.geom.Line2D;

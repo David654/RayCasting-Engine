@@ -16,7 +16,7 @@ import game.sceneobjects.handlers.input.InputHandler;
 import game.raycasting.Floor;
 import game.raycasting.RayCaster;
 import game.raycasting.Sky;
-import game.sceneobjects.Player;
+import game.sceneobjects.entities.Player;
 import game.sceneobjects.rays.Ray;
 import game.sceneobjects.handlers.sceneobjects.RayHandler;
 import game.sceneobjects.handlers.sceneobjects.ObstacleHandler;
