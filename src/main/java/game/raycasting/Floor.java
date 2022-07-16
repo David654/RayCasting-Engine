@@ -3,43 +3,21 @@ package game.raycasting;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import game.sceneobjects.entities.Player;
 import game.sceneobjects.handlers.sceneobjects.RayHandler;
 
-public class Floor
+public class Floor extends RayCastingObject
 {
-    private Color color;
-    private Texture texture;
-
     public Floor(Color color)
     {
-        this.color = color;
+        super(color);
     }
 
     public Floor(Texture texture)
     {
-        this.texture = texture;
-    }
-
-    public Color getColor()
-    {
-        return color;
-    }
-
-    public void setColor(Color color)
-    {
-        this.color = color;
-    }
-
-    public Texture getTexture()
-    {
-        return texture;
-    }
-
-    public void setTexture(Texture texture)
-    {
-        this.texture = texture;
+        super(texture);
     }
 
     public void rayCast(RayHandler rayHandler, Player player, ShapeRenderer shapeRenderer)
@@ -53,5 +31,10 @@ public class Floor
             shapeRenderer.setColor(new Color(r, g, b, 1));
             shapeRenderer.rect(0, Gdx.graphics.getHeight() / 2f + step * (rayHandler.getObjectsCount() - 1 - i) + player.getVerticalShift() + player.getHeight(), Gdx.graphics.getWidth(), step);
         }
+    }
+
+    public void rayCast(RayHandler rayHandler, Player player, SpriteBatch spriteBatch)
+    {
+
     }
 }

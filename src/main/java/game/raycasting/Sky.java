@@ -8,39 +8,16 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import game.sceneobjects.entities.Player;
 import game.sceneobjects.handlers.sceneobjects.RayHandler;
 
-public class Sky
+public class Sky extends RayCastingObject
 {
-    private Color color;
-    private Texture texture;
-
     public Sky(Color color)
     {
-        this.color = color;
+        super(color);
     }
 
     public Sky(Texture texture)
     {
-        this.texture = texture;
-    }
-
-    public Color getColor()
-    {
-        return color;
-    }
-
-    public void setColor(Color color)
-    {
-        this.color = color;
-    }
-
-    public Texture getTexture()
-    {
-        return texture;
-    }
-
-    public void setTexture(Texture texture)
-    {
-        this.texture = texture;
+        super(texture);
     }
 
     public void rayCast(RayHandler rayHandler, Player player, ShapeRenderer shapeRenderer)
