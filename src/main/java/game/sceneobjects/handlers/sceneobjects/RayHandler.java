@@ -1,8 +1,8 @@
-package game.sceneobjects.handlers;
+package game.sceneobjects.handlers.sceneobjects;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import game.sceneobjects.rays.Ray;
-import game.sceneobjects.rays.RayThread;
+import game.threads.RayThread;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;

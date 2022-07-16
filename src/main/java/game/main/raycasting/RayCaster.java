@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import game.GameConstants;
 import game.sceneobjects.Player;
 import game.sceneobjects.rays.Ray;
-import game.sceneobjects.handlers.RayHandler;
+import game.sceneobjects.handlers.sceneobjects.RayHandler;
 import game.sceneobjects.entities.obstacles.Obstacle;
 import game.sceneobjects.entities.geometry.Circle;
 import game.sceneobjects.entities.geometry.Polygon;

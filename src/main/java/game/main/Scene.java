@@ -12,17 +12,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import game.GameConstants;
 import game.hud.HUD;
-import game.input.InputHandler;
+import game.sceneobjects.handlers.input.InputHandler;
 import game.main.raycasting.Floor;
 import game.main.raycasting.RayCaster;
 import game.main.raycasting.Sky;
 import game.sceneobjects.Player;
 import game.sceneobjects.rays.Ray;
-import game.sceneobjects.handlers.RayHandler;
-import game.sceneobjects.handlers.ObstacleHandler;
+import game.sceneobjects.handlers.sceneobjects.RayHandler;
+import game.sceneobjects.handlers.sceneobjects.ObstacleHandler;
 import game.sceneobjects.entities.obstacles.Wall;
 import game.sceneobjects.entities.geometry.Circle;
-import game.sceneobjects.entities.geometry.Polygon;
 import game.sceneobjects.entities.geometry.Rectangle;
 import launcher.LaunchConstants;
 import org.lwjgl.opengl.GL20;
@@ -169,14 +168,14 @@ public class Scene extends ScreenAdapter implements Runnable
         stop();
     }
 
-    public synchronized void render(float delta)
+    public void render(float delta)
     {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        // minimap
+        // MINIMAP
         frameBuffer.begin();
 
         shapeRenderer.setColor(Color.BLACK);
@@ -191,7 +190,7 @@ public class Scene extends ScreenAdapter implements Runnable
         frameBuffer.end();
         hud.getMinimap().setFrameBuffer(frameBuffer);
 
-        // game
+        // GAME
         shapeRenderer.setProjectionMatrix(camera.combined);
         batch.setProjectionMatrix(camera.combined);
 

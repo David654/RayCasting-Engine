@@ -1,4 +1,4 @@
-package game.input;
+package game.sceneobjects.handlers.input;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

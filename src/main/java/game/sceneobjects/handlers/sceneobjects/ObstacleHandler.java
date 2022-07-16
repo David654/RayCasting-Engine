@@ -1,4 +1,4 @@
-package game.sceneobjects.handlers;
+package game.sceneobjects.handlers.sceneobjects;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import game.sceneobjects.entities.obstacles.Obstacle;

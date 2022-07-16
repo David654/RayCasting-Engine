@@ -1,4 +1,4 @@
-package game.sceneobjects.handlers;
+package game.sceneobjects.handlers.sceneobjects;
 
 import java.util.ArrayList;
 

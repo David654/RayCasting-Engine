@@ -1,7 +1,7 @@
-package game.sceneobjects.rays;
+package game.threads;
 
-import game.sceneobjects.handlers.RayHandler;
-import game.threads.SceneObjectThread;
+import game.sceneobjects.handlers.sceneobjects.RayHandler;
+import game.sceneobjects.rays.Ray;
 
 public class RayThread extends SceneObjectThread<Ray>
 {

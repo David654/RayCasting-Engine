@@ -1,6 +1,6 @@
 package game.threads;
 
-import game.sceneobjects.handlers.SceneObjectHandler;
+import game.sceneobjects.handlers.sceneobjects.SceneObjectHandler;
 
 public abstract class SceneObjectThread<T> extends Thread
 {
