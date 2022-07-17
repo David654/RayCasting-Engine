@@ -62,10 +62,7 @@ public class RayCaster
                     Shape shape = obstacles.get(j).getShape();
                     
                     float height = shape.getHeight();
-                    float y = 0;
-                    if(shape instanceof Circle circle) y = circle.getPosition().z;
-                    if(shape instanceof Rectangle rectangle) y = rectangle.getPosition().z;
-                    if(shape instanceof Polygon polygon) y = polygon.getY();
+                    float y = shape.getY();
 
                     float distance1 = ray.distanceTo(ray.getStart(), pointsOfIntersection.get(j));
                     distance1 *= MathUtils.cos(ray.getAngle());
@@ -84,7 +81,7 @@ public class RayCaster
                     Color spriteColor = shape.getColor();
                     Texture texture = shape.getTexture();
 
-                    // TOP
+                    // TOP & BOTTOM
                     if(texture == null)
                     {
                         float r = spriteColor.r / (1 + distance1 * 0.0005f);
@@ -93,8 +90,10 @@ public class RayCaster
 
                         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                         shapeRenderer.setColor(new Color(r, g, b, 1));
-                        if(shape.isDoDrawTop()) shapeRenderer.rect(i * GameConstants.scale, y2, GameConstants.scale, y1 - y2);
-                        if(shape.isDoDrawBottom()) shapeRenderer.rect(i * GameConstants.scale, y2 + projectionHeight2 * height, GameConstants.scale, y1 - y2);
+                        if(shape.isDoDrawTop())
+                            shapeRenderer.rect(i * GameConstants.scale, y2, GameConstants.scale, y1 - y2);
+                        if(y > 0 && shape.isDoDrawBottom())
+                            shapeRenderer.rect(i * GameConstants.scale, y2 + projectionHeight2 * height, GameConstants.scale, y1 - y2);
                         shapeRenderer.end();
                     }
                     else
@@ -105,8 +104,10 @@ public class RayCaster
                         spriteBatch.begin();
                         TextureRegion textureRegion = new TextureRegion(texture, (int) (offset), 0, 1, texture.getHeight());
                         textureRegion.flip(false, true);
-                        if(shape.isDoDrawTop()) spriteBatch.draw(textureRegion, i * GameConstants.scale, y2, GameConstants.scale, y1 - y2);
-                        if(shape.isDoDrawBottom()) spriteBatch.draw(textureRegion, i * GameConstants.scale, y2 + projectionHeight2 * height, GameConstants.scale, y1 - y2);
+                        if(shape.isDoDrawTop())
+                            spriteBatch.draw(textureRegion, i * GameConstants.scale, y2, GameConstants.scale, y1 - y2);
+                        if(y > 0 && shape.isDoDrawBottom())
+                            spriteBatch.draw(textureRegion, i * GameConstants.scale, y2 + projectionHeight2 * height, GameConstants.scale, y1 - y2);
                         spriteBatch.end();
 
                         float a = 1 / (1 + distance2 * distance2 * 0.000001f);

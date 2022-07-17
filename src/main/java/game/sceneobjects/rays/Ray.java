@@ -204,6 +204,21 @@ public class Ray
             float dist2 = distanceTo(start, i2);
             return Float.compare(dist1, dist2);
         });
+
+        /*for(int i = 0; i < intersectedObstacles.size() - 1; i++)
+        {
+            Obstacle obstacle1 = intersectedObstacles.get(i);
+            Obstacle obstacle2 = intersectedObstacles.get(i + 1);
+            Shape shape1 = obstacle1.getShape();
+            Shape shape2 = obstacle2.getShape();
+
+            if(shape1.getHeight() > shape2.getHeight() && shape1.getY() == shape2.getY())
+            {
+                pointsOfIntersection.remove(pointsOfIntersection.get(i + 1));
+                otherPointsOfIntersection.remove(otherPointsOfIntersection.get(i + 1));
+                intersectedObstacles.remove(obstacle2);
+            }
+        }**/
     }
 
     public void render(ShapeRenderer renderer)

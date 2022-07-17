@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import game.hud.HUD;
+import game.sceneobjects.entities.geometry.Polygon;
 import game.sceneobjects.handlers.input.InputHandler;
 import game.raycasting.Floor;
 import game.raycasting.RayCaster;
@@ -84,8 +85,8 @@ public class Scene extends ScreenAdapter implements Runnable
 
     private void initSprites()
     {
-        //obstacleHandler.addObject(new Wall(new Polygon(new float[] {700, 700, 900, 900, 800, 1200}, 0.3f, 300, Color.SCARLET)));
-        //obstacleHandler.addObject(new Wall(new Polygon(new float[] {200, 1000, 600, 1200, 400, 1500}, 1, 0, new Texture("src\\main\\resources\\img 4.jpg"))));
+        obstacleHandler.addObject(new Wall(new Polygon(new float[] {700, 700, 900, 900, 800, 1200}, 0.3f, 500, Color.SCARLET)));
+        obstacleHandler.addObject(new Wall(new Polygon(new float[] {200, 1000, 600, 1200, 400, 1500}, 1, 500, new Texture("src\\main\\resources\\img 4.jpg"))));
         obstacleHandler.addObject(new Wall(new Circle(new Vector3(100, 400, 500), 32, 0.6f, new Color(0.85f, 0.97f, 0.65f, 1))));
         obstacleHandler.addObject(new Wall(new Circle(new Vector3(100, 192, 0), 64, 1, new Texture("src\\main\\resources\\img 5.jpg"))));
         obstacleHandler.addObject(new Wall(new Circle(new Vector3(100, 64, 0), 48, 0.4f, new Color(1, 0.76f, 0, 1))));

@@ -43,6 +43,15 @@ public abstract class Shape
         this.height = height;
     }
 
+    public float getY()
+    {
+        float y = 0;
+        if(this instanceof Circle circle) y = circle.getPosition().z;
+        if(this instanceof Rectangle rectangle) y = rectangle.getPosition().z;
+        if(this instanceof Polygon polygon) y = polygon.getY();
+        return y;
+    }
+
     public Color getColor()
     {
         return color;
