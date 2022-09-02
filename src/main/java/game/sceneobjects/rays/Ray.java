@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import game.main.Scene;
+import game.main.Game;
 import game.sceneobjects.entities.obstacles.Obstacle;
 import game.sceneobjects.entities.obstacles.Wall;
 import game.sceneobjects.entities.geometry.Shape;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class Ray
 {
-    private final Scene scene;
+    private final Game game;
     private Vector2 start;
     private Vector2 end;
     private float angle, length;
@@ -23,13 +23,13 @@ public class Ray
     private final ArrayList<Vector2> otherPointsOfIntersection;
     private final ArrayList<Obstacle> intersectedObstacles;
 
-    public Ray(Scene scene, Vector2 start, float angle, float length)
+    public Ray(Game game, Vector2 start, float angle, float length)
     {
-        this.scene = scene;
+        this.game = game;
         this.start = start;
         this.angle = angle;
         this.length = length;
-        end = new Vector2(start.x + length * MathUtils.cos(scene.player.getRotationAngle() + angle), start.y + length * MathUtils.sin(scene.player.getRotationAngle() + angle));
+        end = new Vector2(start.x + length * MathUtils.cos(game.player.getRotationAngle() + angle), start.y + length * MathUtils.sin(game.player.getRotationAngle() + angle));
         pointsOfIntersection = new ArrayList<>();
         otherPointsOfIntersection = new ArrayList<>();
         intersectedObstacles = new ArrayList<>();
@@ -67,7 +67,7 @@ public class Ray
 
     public float getFullAngle()
     {
-        return scene.player.getRotationAngle() + angle;
+        return game.player.getRotationAngle() + angle;
     }
 
     public float getLength()
@@ -134,30 +134,30 @@ public class Ray
         Shape shape = obstacle.getShape();
         if(shape instanceof Circle circle)
         {
-            return circle.getPointsOfIntersectionWithLine(this, scene.player);
+            return circle.getPointsOfIntersectionWithLine(this, game.player);
         }
         else if(shape instanceof Rectangle rectangle)
         {
-            return rectangle.getPointsOfIntersectionWithLine(this, scene.player);
+            return rectangle.getPointsOfIntersectionWithLine(this, game.player);
         }
         else if(shape instanceof Polygon polygon)
         {
-            return polygon.getPointsOfIntersectionWithLine(this, scene.player);
+            return polygon.getPointsOfIntersectionWithLine(this, game.player);
         }
         return new Vector2[] {end, end};
     }
 
     public void update()
     {
-        start = new Vector2(scene.player.getPosition().x, scene.player.getPosition().y);
-        end = new Vector2(start.x + length * MathUtils.cos(scene.player.getRotationAngle() + angle), start.y + length * MathUtils.sin(scene.player.getRotationAngle() + angle));
+        start = new Vector2(game.player.getPosition().x, game.player.getPosition().y);
+        end = new Vector2(start.x + length * MathUtils.cos(game.player.getRotationAngle() + angle), start.y + length * MathUtils.sin(game.player.getRotationAngle() + angle));
         pointsOfIntersection.clear();
         otherPointsOfIntersection.clear();
         intersectedObstacles.clear();
 
-        for(int i = 0; i < scene.obstacleHandler.getObjectsCount(); i++)
+        for(int i = 0; i < game.obstacleHandler.getObjectsCount(); i++)
         {
-            Obstacle s = scene.obstacleHandler.getObject(i);
+            Obstacle s = game.obstacleHandler.getObject(i);
             if(intersects(s))
             {
                 if(s instanceof Wall)

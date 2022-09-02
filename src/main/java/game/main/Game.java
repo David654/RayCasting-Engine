@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -26,7 +27,7 @@ import game.sceneobjects.entities.geometry.Rectangle;
 import launcher.LaunchConstants;
 import org.lwjgl.opengl.GL20;
 
-public class Scene extends ScreenAdapter implements Runnable
+public class Game extends ScreenAdapter implements Runnable
 {
     private Thread thread;
     private boolean running = false;
@@ -35,15 +36,22 @@ public class Scene extends ScreenAdapter implements Runnable
     private final ShapeRenderer shapeRenderer;
     private SpriteBatch batch;
     private SpriteBatch hudBatch;
+    private SpriteBatch shaderBatch;
     private final BitmapFont font;
     public final FrameBuffer frameBuffer;
+    public final FrameBuffer miniMapFrameBuffer;
+    public ShaderProgram shader;
     public final Player player;
     public final RayHandler rayHandler;
     public final ObstacleHandler obstacleHandler;
     public final HUD hud;
     public final RayCaster rayCaster;
 
-    public Scene()
+    public float time;
+    public final Texture binocularMask;
+    public final Texture noise;
+
+    public Game()
     {
         camera = new OrthographicCamera(Gdx.graphics.getWidth() * 4, Gdx.graphics.getHeight() * 4);
         camera.setToOrtho(true);
@@ -56,8 +64,12 @@ public class Scene extends ScreenAdapter implements Runnable
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         hudBatch = new SpriteBatch();
+        shaderBatch = new SpriteBatch();
         font = new BitmapFont();
-        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getHeight(), Gdx.graphics.getHeight(), false);
+        frameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+        miniMapFrameBuffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getHeight(), Gdx.graphics.getHeight(), false);
+
+        initShader();
 
         player = new Player(this, new Vector3(500, 400, 0), 16, 0);
         rayHandler = new RayHandler();
@@ -70,6 +82,18 @@ public class Scene extends ScreenAdapter implements Runnable
 
         Gdx.graphics.setSystemCursor(Cursor.SystemCursor.None);
         Gdx.input.setInputProcessor(new InputHandler(this));
+
+        binocularMask = new Texture("src\\main\\resources\\binocular mask.png");
+        noise = new Texture("src\\main\\resources\\noise.png");
+    }
+
+    private void initShader()
+    {
+        ShaderProgram.pedantic = false;
+        String vertexShader = shaderBatch.getShader().getVertexShaderSource();
+        String fragmentShader = Gdx.files.local("src\\main\\java\\game\\shaders\\shader.glsl").readString();
+        shader = new ShaderProgram(vertexShader, fragmentShader);
+        if(!shader.isCompiled()) ProgramStateReporter.report(shader.getLog());
     }
 
     private void initRays(float fov, float numRays, float rayLength)
@@ -126,6 +150,29 @@ public class Scene extends ScreenAdapter implements Runnable
         System.exit(0);
     }
 
+    private void updateShader()
+    {
+        /*shader.setUniformf("u_resolution", Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        float[][] distances = rayCaster.getDistances();
+        for(int row = 0; row < Gdx.graphics.getHeight(); row++)
+        {
+            for(int col = 0; col < Gdx.graphics.getWidth(); col++)
+            {
+                int index = row * Gdx.graphics.getHeight() + col;
+                shader.setUniform3fv("u_distances[" + index + "]", distances[row], 0, Gdx.graphics.getHeight());
+            }
+        }**/
+        shader.bind();
+        time += Gdx.graphics.getDeltaTime();
+        shader.setUniformf("uResolution", new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        shader.setUniformf("uTime", time);
+
+        Texture buffer = frameBuffer.getColorBufferTexture();
+        buffer.bind(0);
+        shader.setUniformi("sFrameBuffer", 0);
+    }
+
     private void update()
     {
         player.update();
@@ -176,7 +223,7 @@ public class Scene extends ScreenAdapter implements Runnable
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         // MINIMAP
-        frameBuffer.begin();
+        miniMapFrameBuffer.begin();
 
         shapeRenderer.setColor(Color.BLACK);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -187,15 +234,24 @@ public class Scene extends ScreenAdapter implements Runnable
         player.render(shapeRenderer);
         obstacleHandler.renderObjects(shapeRenderer);
 
-        frameBuffer.end();
-        hud.getMinimap().setFrameBuffer(frameBuffer);
+        miniMapFrameBuffer.end();
+        hud.getMinimap().setFrameBuffer(miniMapFrameBuffer);
 
         // GAME
         shapeRenderer.setProjectionMatrix(camera.combined);
         batch.setProjectionMatrix(camera.combined);
 
+        //frameBuffer.begin();
+
         rayHandler.updateObjects();
         rayCaster.render(player, shapeRenderer, batch);
+        //frameBuffer.end();
+
+        /*updateShader();
+        shaderBatch.setShader(shader);
+        shaderBatch.begin();
+        shaderBatch.draw(frameBuffer.getColorBufferTexture(), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        shaderBatch.end();**/
 
         hudBatch.begin();
         hud.render(hudBatch, font);

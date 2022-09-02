@@ -13,10 +13,7 @@ import game.sceneobjects.entities.Player;
 import game.sceneobjects.rays.Ray;
 import game.sceneobjects.handlers.sceneobjects.RayHandler;
 import game.sceneobjects.entities.obstacles.Obstacle;
-import game.sceneobjects.entities.geometry.Circle;
-import game.sceneobjects.entities.geometry.Polygon;
 import game.sceneobjects.entities.geometry.Shape;
-import game.sceneobjects.entities.geometry.Rectangle;
 
 import java.util.ArrayList;
 
@@ -25,17 +22,35 @@ public class RayCaster
     private final RayHandler rayHandler;
     private final Sky sky;
     private final Floor floor;
+    private float[][] distances;
 
     public RayCaster(RayHandler rayHandler, Sky sky, Floor floor)
     {
         this.rayHandler = rayHandler;
         this.sky = sky;
         this.floor = floor;
+        distances = new float[Gdx.graphics.getHeight()][Gdx.graphics.getWidth()];
     }
 
     public void update()
     {
 
+    }
+
+    private void addDistance(int startX, int endX, int startY, int endY, float distance)
+    {
+        for(int y = startY; y < endY; y++)
+        {
+            for(int x = startX; x < endX; x++)
+            {
+                distances[y][x] = distance;
+            }
+        }
+    }
+
+    public float[][] getDistances()
+    {
+        return distances;
     }
 
     public void render(Player player, ShapeRenderer shapeRenderer, SpriteBatch spriteBatch)
@@ -84,9 +99,9 @@ public class RayCaster
                     // TOP & BOTTOM
                     if(texture == null)
                     {
-                        float r = spriteColor.r / (1 + distance1 * 0.0005f);
-                        float g = spriteColor.g / (1 + distance1 * 0.0005f);
-                        float b = spriteColor.b / (1 + distance1 * 0.0005f);
+                        float r = spriteColor.r / (1 + distance2 * 0.0005f);
+                        float g = spriteColor.g / (1 + distance2 * 0.0005f);
+                        float b = spriteColor.b / (1 + distance2 * 0.0005f);
 
                         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                         shapeRenderer.setColor(new Color(r, g, b, 1));
@@ -110,18 +125,8 @@ public class RayCaster
                             spriteBatch.draw(textureRegion, i * GameConstants.scale, y2 + projectionHeight2 * height, GameConstants.scale, y1 - y2);
                         spriteBatch.end();
 
-                        float a = 1 / (1 + distance2 * distance2 * 0.000001f);
-                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                        shapeRenderer.setColor(new Color(0, 0, 0, 1 - a));
-                        if(shape.isDoDrawTop())
-                        {
-                            //shapeRenderer.rect(i * GameConstants.scale, y2, GameConstants.scale, y1 - y2);
-                        }
-                        if(shape.isDoDrawBottom())
-                        {
-                            //shapeRenderer.rect(i * GameConstants.scale, y2 + projectionHeight2 * height, GameConstants.scale, y1 - y2);
-                        }
-                        shapeRenderer.end();
+                        //addDistance((int) (i * GameConstants.scale), (int) y2, (int) GameConstants.scale, (int) (y1 - y2), distance2);
+                        //addDistance((int) (i * GameConstants.scale), (int) (y2 + projectionHeight2 * height), (int) GameConstants.scale, (int) (y1 - y2), distance2);
 
                     }
 
@@ -148,11 +153,7 @@ public class RayCaster
                         spriteBatch.draw(textureRegion, i * GameConstants.scale, y1, GameConstants.scale, projectionHeight1 * height);
                         spriteBatch.end();
 
-                        float a = 1 / (1 + distance1 * distance1 * 0.000001f);
-                        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                        shapeRenderer.setColor(new Color(0, 0, 0, 1 - a));
-                        //shapeRenderer.rect(i * GameConstants.scale, y1, GameConstants.scale, projectionHeight1 * height);
-                        shapeRenderer.end();
+                        //addDistance((int) (i * GameConstants.scale), (int) y1, (int) GameConstants.scale, (int) (projectionHeight1 * height), distance1);
                     }
                 }
             }

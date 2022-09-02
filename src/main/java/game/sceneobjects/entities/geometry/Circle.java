@@ -65,31 +65,31 @@ public class Circle extends Shape
 
     public Vector2[] getPointsOfIntersectionWithLine(Ray ray, Player player)
     {
-        float k = (float) Math.tan(ray.getFullAngle());
-        float c = -k * ray.getStart().x + ray.getStart().y;
+        double k = Math.tan(ray.getFullAngle());
+        double c = -k * ray.getStart().x + ray.getStart().y;
 
-        float a = getCenter().x;
-        float b = getCenter().y;
+        double a = getCenter().x;
+        double b = getCenter().y;
 
-        float z = c - b;
+        double z = c - b;
 
-        float D = (float) (4 * Math.pow(a - k * z, 2) - 4 * (1 + k * k) * (a * a + z * z - radius * radius));
+        double D = 4 * Math.pow(a - k * z, 2) - 4 * (1 + k * k) * (a * a + z * z - radius * radius);
 
-        float x1 = (float) ((2 * (a - k * z) + Math.sqrt(D)) / (2 * (1 + k * k)));
-        float x2 = (float) ((2 * (a - k * z) - Math.sqrt(D)) / (2 * (1 + k * k)));
-        float y1 = k * x1 + c;
-        float y2 = k * x2 + c;
+        double x1 = (2 * (a - k * z) + Math.sqrt(D)) / (2 * (1 + k * k));
+        double x2 = (2 * (a - k * z) - Math.sqrt(D)) / (2 * (1 + k * k));
+        double y1 = k * x1 + c;
+        double y2 = k * x2 + c;
 
-        float dist1 = Vector2.dst(x1, y1, player.getPosition().x, player.getPosition().y);
-        float dist2 = Vector2.dst(x2, y2, player.getPosition().x, player.getPosition().y);
+        double dist1 = Vector2.dst((float) x1, (float) y1, player.getPosition().x, player.getPosition().y);
+        double dist2 = Vector2.dst((float) x2, (float) y2, player.getPosition().x, player.getPosition().y);
 
         if(dist1 < dist2)
         {
-            return new Vector2[]{new Vector2(x1, y1), new Vector2(x2, y2)};
+            return new Vector2[]{new Vector2((float) x1, (float) y1), new Vector2((float) x2, (float) y2)};
         }
         else
         {
-            return new Vector2[] {new Vector2(x2, y2), new Vector2(x1, y1)};
+            return new Vector2[] {new Vector2((float) x2, (float) y2), new Vector2((float) x1, (float) y1)};
         }
     }
 

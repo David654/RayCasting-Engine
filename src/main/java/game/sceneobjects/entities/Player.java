@@ -8,11 +8,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import game.main.GameConstants;
-import game.main.Scene;
+import game.main.Game;
 
 public class Player
 {
-    private final Scene scene;
+    private final Game game;
     private Vector3 position;
     private float radius;
     private Vector3 velocity;
@@ -20,9 +20,9 @@ public class Player
     private float verticalShift = 0;
     private float height = 0;
 
-    public Player(Scene scene, Vector3 position, float radius, float rotationAngle)
+    public Player(Game game, Vector3 position, float radius, float rotationAngle)
     {
-        this.scene = scene;
+        this.game = game;
         this.position = position;
         this.radius = radius;
         this.rotationAngle = rotationAngle;

@@ -1,14 +1,13 @@
 package launcher;
 
-import com.badlogic.gdx.Game;
-import game.main.Scene;
+import game.main.Game;
 
-public class Boot extends Game
+public class Boot extends com.badlogic.gdx.Game
 {
     public void create()
     {
-        Scene scene = new Scene();
-        scene.start();
-        setScreen(scene);
+        Game game = new Game();
+        game.start();
+        setScreen(game);
     }
 }

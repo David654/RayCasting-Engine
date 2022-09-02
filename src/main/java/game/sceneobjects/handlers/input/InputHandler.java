@@ -6,17 +6,17 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import game.main.GameConstants;
-import game.main.Scene;
+import game.main.Game;
 
 public class InputHandler implements InputProcessor
 {
-    private final Scene scene;
+    private final Game game;
     private int keycode;
     private boolean isCtrlPressed = false;
 
-    public InputHandler(Scene scene)
+    public InputHandler(Game game)
     {
-        this.scene = scene;
+        this.game = game;
     }
 
     public boolean keyDown(int keycode)
@@ -28,7 +28,7 @@ public class InputHandler implements InputProcessor
     public boolean keyUp(int keycode)
     {
         this.keycode = -1;
-        if(keycode == Input.Keys.ESCAPE) scene.exit();
+        if(keycode == Input.Keys.ESCAPE) game.exit();
         return false;
     }
 
@@ -52,13 +52,13 @@ public class InputHandler implements InputProcessor
         float differenceX = screenX - Gdx.graphics.getWidth() / 2f;
         float differenceY = screenY - Gdx.graphics.getHeight() / 2f;
         Gdx.input.setCursorPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        scene.player.setRotationAngle(scene.player.getRotationAngle() + GameConstants.mouseSensitivityX * differenceX);
+        game.player.setRotationAngle(game.player.getRotationAngle() + GameConstants.mouseSensitivityX * differenceX);
 
-        float verticalShift = scene.player.getVerticalShift() - 1000 * GameConstants.mouseSensitivityY * differenceY;
+        float verticalShift = game.player.getVerticalShift() - 2000 * GameConstants.mouseSensitivityY * differenceY;
         verticalShift = MathUtils.clamp(verticalShift, -700, 700);
-        scene.player.setVerticalShift(verticalShift);
+        game.player.setVerticalShift(verticalShift);
 
-        if(keycode != -1) scene.player.move(new Vector2(GameConstants.playerSpeed, GameConstants.playerSpeed));
+        if(keycode != -1) game.player.move(new Vector2(GameConstants.playerSpeed, GameConstants.playerSpeed));
         return false;
     }
 
@@ -67,13 +67,13 @@ public class InputHandler implements InputProcessor
         float differenceX = screenX - Gdx.graphics.getWidth() / 2f;
         float differenceY = screenY - Gdx.graphics.getHeight() / 2f;
         Gdx.input.setCursorPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        scene.player.setRotationAngle(scene.player.getRotationAngle() + GameConstants.mouseSensitivityX * differenceX);
+        game.player.setRotationAngle(game.player.getRotationAngle() + GameConstants.mouseSensitivityX * differenceX);
 
-        float verticalShift = scene.player.getVerticalShift() - 1000 * GameConstants.mouseSensitivityY * differenceY;
+        float verticalShift = game.player.getVerticalShift() - 2000 * GameConstants.mouseSensitivityY * differenceY;
         verticalShift = MathUtils.clamp(verticalShift, -700, 700);
-        scene.player.setVerticalShift(verticalShift);
+        game.player.setVerticalShift(verticalShift);
 
-        if(keycode != -1) scene.player.move(new Vector2(GameConstants.playerSpeed, GameConstants.playerSpeed));
+        if(keycode != -1) game.player.move(new Vector2(GameConstants.playerSpeed, GameConstants.playerSpeed));
         return false;
     }
 

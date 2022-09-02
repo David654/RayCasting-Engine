@@ -5,17 +5,17 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import game.main.GameConstants;
-import game.main.Scene;
+import game.main.Game;
 import launcher.LaunchConstants;
 
 public class HUD
 {
-    private final Scene scene;
+    private final Game game;
     private final Minimap minimap;
 
-    public HUD(Scene scene)
+    public HUD(Game game)
     {
-        this.scene = scene;
+        this.game = game;
         minimap = new Minimap(Gdx.graphics.getWidth() * GameConstants.minimapScale, Gdx.graphics.getWidth() * GameConstants.minimapScale);
     }
 
@@ -34,8 +34,8 @@ public class HUD
         font.setColor(Color.YELLOW);
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, Gdx.graphics.getHeight() - 10);
         font.draw(batch, "Tick Rate: " + LaunchConstants.tickRate, 10, Gdx.graphics.getHeight() - 30);
-        font.draw(batch, "Rays: " + scene.rayHandler.getObjectsCount(), 10, Gdx.graphics.getHeight() - 50);
-        font.draw(batch, "Sprites: " + scene.obstacleHandler.getObjectsCount(), 10, Gdx.graphics.getHeight() - 70);
+        font.draw(batch, "Rays: " + game.rayHandler.getObjectsCount(), 10, Gdx.graphics.getHeight() - 50);
+        font.draw(batch, "Sprites: " + game.obstacleHandler.getObjectsCount(), 10, Gdx.graphics.getHeight() - 70);
 
         minimap.render(batch);
     }
